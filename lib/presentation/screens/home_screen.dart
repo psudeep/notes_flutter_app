@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notes App'),
+        title: Text('Clean Notes'),
         actions: [
           IconButton(
             icon: Icon(Icons.person),

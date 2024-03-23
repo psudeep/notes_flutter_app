@@ -13,7 +13,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Clean Notes',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: MaterialColor(
+          Colors.black.value,
+          <int, Color>{
+            50: Colors.black,
+            100: Colors.black,
+            200: Colors.black,
+            300: Colors.black,
+            400: Colors.black,
+            500: Colors.black,
+            600: Colors.black,
+            700: Colors.black,
+            800: Colors.black,
+            900: Colors.black,
+          },
+        ),
       ),
       routes: {
         '/': (context) => HomeScreen(),
