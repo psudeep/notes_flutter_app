@@ -37,3 +37,16 @@ To relaunch your Flutter app in the emulator after making code changes, you have
 - Hot Reload: If you're making small changes and want to see them reflected in the running app without restarting it, you can use hot reload. Simply save your changes in the code editor, and then press the "R" key twice in your terminal or press the hot reload button in your IDE.
 - Stop and Restart: If you've made significant changes or if hot reload isn't working as expected, you can stop the currently running app and restart it. You can do this by pressing "Ctrl+C" in your terminal to stop the running Flutter process, and then running flutter run again.
 - Rerun: If you want to ensure a clean build and start the app from scratch, you can use the flutter run command again without stopping the current process. This will rebuild and rerun the app.
+
+### get APK code App code
+
+- Ensure Flutter SDK is Installed: Make sure you have Flutter SDK installed on your system. You can download it from the official Flutter website.
+- Update Flutter SDK and Packages: Run the following commands in your terminal to ensure you have the latest Flutter SDK and packages:
+
+- prerequisites command 
+-- `flutter upgrade`
+-- `flutter pub get`
+
+- `flutter build apk --release`
+- `flutter build apk --debug`
+- If you have device connected using the command `flutter install`
