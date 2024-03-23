@@ -3,6 +3,8 @@ import 'package:notes_lelo/data/models/note.dart';
 import 'package:notes_lelo/presentation/screens/login_screen.dart';
 import '../../data/models/note_model.dart';
 import '../../data/note_database.dart';
+import '../../common/toast.dart';
+import '../../common/constants.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -28,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clean Notes'),
+        title: Text(Constants.homeScreenName),
         actions: [
           IconButton(
             icon: Icon(Icons.person),
@@ -230,6 +232,16 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Toast.show(
+            context,
+            'This is a toast message',
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () {
+                // Perform action when the action button is pressed
+              },
+            ),
+          );
           // Handle save action
           _saveNote();
         },

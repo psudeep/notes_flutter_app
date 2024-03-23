@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_lelo/data/models/note.dart';
 import '../../data/note_database.dart';
+import '../../common/toast.dart';
 
 class NewNoteScreen extends StatefulWidget {
   @override
@@ -57,6 +58,16 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Toast.show(
+            context,
+            'This is a toast message',
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () {
+                // Perform action when the action button is pressed
+              },
+            ),
+          );
           _saveNote();
         },
         child: Icon(Icons.save),
