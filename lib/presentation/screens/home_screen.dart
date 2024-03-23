@@ -30,9 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: ListView(
               children: [
-                _buildCategoryCard('Category 1', 0),
-                _buildCategoryCard('Category 2', 1),
-                _buildCategoryCard('Category 3', 2),
+                _buildCategoryCard(context, 'Fix phlebex api bugs', 0),
+                _buildCategoryCard(context, 'max API changes to be done', 1),
+                _buildCategoryCard(
+                    context, 'regency phase 1 changes to be live', 2),
                 // Add more category cards as needed
               ],
             ),
@@ -119,14 +120,69 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCategoryCard(String categoryName, int index) {
-    return Card(
-      margin: EdgeInsets.all(8),
-      child: ListTile(
+  Widget _buildCategoryCard(
+      BuildContext context, String categoryName, int index) {
+    return GestureDetector(
+      onTap: () {
+        // Handle category card click - Navigate to Note Detail Screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  NoteDetailScreen(categoryName: categoryName)),
+        );
+      },
+      child: Card(
+        margin: EdgeInsets.all(8),
+        child: ListTile(
+          title: Text(categoryName),
+        ),
+      ),
+    );
+  }
+}
+
+// Note Detail Screen
+class NoteDetailScreen extends StatelessWidget {
+  final String categoryName;
+
+  NoteDetailScreen({required this.categoryName});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
         title: Text(categoryName),
-        onTap: () {
-          // Handle category selection
-        },
+        actions: [
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {
+              // Handle share action
+            },
+          ),
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'edit',
+                child: Text('Edit'),
+              ),
+              PopupMenuItem(
+                value: 'delete',
+                child: Text('Delete'),
+              ),
+            ],
+            onSelected: (value) {
+              if (value == 'edit') {
+                // Handle edit action
+              } else if (value == 'delete') {
+                // Handle delete action
+              }
+            },
+          ),
+        ],
+      ),
+      body: Center(
+        child: Text('Note Detail'),
       ),
     );
   }

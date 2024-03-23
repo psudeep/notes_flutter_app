@@ -13,55 +13,44 @@ class NotesListScreen extends StatelessWidget {
           return _buildNoteCard(context, index);
         },
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 1, // Notes tab selected
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.pop(context); // Navigate back to the HomeScreen
+          } else if (index == 2) {
+            Navigator.pushNamed(
+                context, '/settings'); // Navigate to the SettingsScreen
+          }
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.note),
+            label: 'Notes',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildNoteCard(BuildContext context, int index) {
-    return Dismissible(
-      key: Key(index.toString()),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        color: Colors.red,
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Icon(Icons.delete, color: Colors.white),
-      ),
-      confirmDismiss: (direction) async {
-        return await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Confirm Delete'),
-              content: Text('Are you sure you want to delete this note?'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: Text('Yes'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-      onDismissed: (direction) {
-        // Handle note deletion here
-      },
-      child: Card(
-        margin: EdgeInsets.all(8),
-        child: ListTile(
-          title: Text('Note Title $index'),
-          subtitle: Text('Note Description $index'),
-          trailing: IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              // Handle edit note action
-            },
-          ),
-        ),
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: ListTile(
+        title: Text('Note Title $index'),
+        subtitle: Text('Note Description $index'),
+        trailing: Icon(Icons.edit),
+        onTap: () {
+          // Handle tapping on the note card
+        },
       ),
     );
   }
