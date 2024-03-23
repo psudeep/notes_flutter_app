@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_lelo/data/models/note.dart';
+import 'package:notes_lelo/presentation/screens/login_screen.dart';
 import '../../data/models/note_model.dart';
 import '../../data/note_database.dart';
 
@@ -27,12 +28,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text('Notes App'),
         actions: [
           IconButton(
             icon: Icon(Icons.person),
             onPressed: () {
-              // Handle user profile or login action
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
             },
           ),
         ],

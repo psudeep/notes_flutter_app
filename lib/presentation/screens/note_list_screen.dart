@@ -49,8 +49,59 @@ class NotesListScreen extends StatelessWidget {
         subtitle: Text('Note Description $index'),
         trailing: Icon(Icons.edit),
         onTap: () {
-          // Handle tapping on the note card
+          // Handle category card click - Navigate to Note Detail Screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    NoteDetailScreen(categoryName: 'Note Title $index')),
+          );
         },
+      ),
+    );
+  }
+}
+
+class NoteDetailScreen extends StatelessWidget {
+  final String categoryName;
+
+  NoteDetailScreen({required this.categoryName});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(categoryName),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {
+              // Handle share action
+            },
+          ),
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'edit',
+                child: Text('Edit'),
+              ),
+              PopupMenuItem(
+                value: 'delete',
+                child: Text('Delete'),
+              ),
+            ],
+            onSelected: (value) {
+              if (value == 'edit') {
+                // Handle edit action
+              } else if (value == 'delete') {
+                // Handle delete action
+              }
+            },
+          ),
+        ],
+      ),
+      body: Center(
+        child: Text('Note Detail'),
       ),
     );
   }
