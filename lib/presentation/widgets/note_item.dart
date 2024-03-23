@@ -12,7 +12,7 @@ class NoteItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(note.title),
-      subtitle: Text(note.content),
+      subtitle: Text(note.description),
       trailing: Text(
         '${note.createdAt.day}/${note.createdAt.month}/${note.createdAt.year}',
       ),

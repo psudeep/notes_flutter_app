@@ -1,7 +1,8 @@
-import 'dart:js_util';
+// import 'dart:js_util';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'package:moor_flutter/moor_flutter.dart';
 import '../../data/models/note.dart';
@@ -21,6 +22,38 @@ class NoteDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  static Future<Database> openDatabase(join,
+      {required Function(dynamic db, dynamic version) onCreate,
+      required int version}) async {
+    // Use the join function from the path package
+    return openDatabase(
+      join(await _getDatabaseFilePath()),
+      onCreate: (db, version) {
+        return db.execute(
+          'CREATE TABLE notes(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT)',
+        );
+      },
+      version: 1,
+    );
+  }
+
+  static Future<List<Note>> getAllNotesV2() async {
+    final Database db = await openDatabase(
+      p.join(await _getDatabaseFilePath()),
+      onCreate: (db, version) {},
+      version: 1,
+    );
+    final List<Map<String, dynamic>> maps = await db.query('notes');
+    return List.generate(maps.length, (i) {
+      return Note(
+        id: maps[i]['id'],
+        title: maps[i]['title'],
+        description: maps[i]['description'],
+        createdAt: DateTime.now(),
+      );
+    });
+  }
 
   static LazyDatabase _openConnection() {
     return LazyDatabase(() async {

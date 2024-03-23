@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:notes_lelo/data/models/note.dart';
+import '../../data/models/note_model.dart';
+import '../../data/note_database.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -7,6 +10,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedTabIndex = 0;
+  List<Note> notes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchNotes();
+  }
+
+  Future<void> _fetchNotes() async {
+    notes = await NoteDatabase.getAllNotesV2();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +43,15 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildUserSection(),
           _buildCategoriesFilter(),
           Expanded(
-            child: ListView(
-              children: [
-                _buildCategoryCard(context, 'Fix phlebex api bugs', 0),
-                _buildCategoryCard(context, 'max API changes to be done', 1),
-                _buildCategoryCard(
-                    context, 'regency phase 1 changes to be live', 2),
-                // Add more category cards as needed
-              ],
+            child: ListView.builder(
+              itemCount: notes.length,
+              itemBuilder: (context, index) {
+                final note = notes[index];
+                return ListTile(
+                  title: Text(note.title),
+                  subtitle: Text(note.description),
+                );
+              },
             ),
           ),
         ],

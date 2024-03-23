@@ -7,7 +7,7 @@ class NoteService {
   Future<void> addNote(Note note) async {
     await _firestore.collection('notes').add({
       'title': note.title,
-      'content': note.content,
+      'description': note.description,
       'created_at': note.createdAt,
     });
   }
