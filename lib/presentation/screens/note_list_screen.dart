@@ -1,57 +1,67 @@
 import 'package:flutter/material.dart';
-import '../../data/models/note.dart';
-import '../../data/repositories/note_repository.dart';
-import '../widgets/note_item.dart';
 
-class NoteListScreen extends StatefulWidget {
-  @override
-  _NoteListScreenState createState() => _NoteListScreenState();
-}
-
-class _NoteListScreenState extends State<NoteListScreen> {
-  final NoteRepository _noteRepository = NoteRepository();
-  late Future<List<Note>> _notesFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _notesFuture = _noteRepository.getAllNotes();
-  }
-
+class NotesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Notes'),
       ),
-      body: FutureBuilder(
-        future: _notesFuture,
-        builder: (context, AsyncSnapshot<List<Note>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            List<Note> notes = snapshot.data!;
-            if (notes.isEmpty) {
-              return Center(child: Text('No notes found.'));
-            } else {
-              return ListView.builder(
-                itemCount: notes.length,
-                itemBuilder: (context, index) {
-                  return NoteItem(note: notes[index]);
-                },
-              );
-            }
-          }
+      body: ListView.builder(
+        itemCount: 10, // Replace with the actual number of notes
+        itemBuilder: (context, index) {
+          return _buildNoteCard(context, index);
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to add note screen
-          Navigator.pushNamed(context, '/addNote');
-        },
-        child: Icon(Icons.add),
+    );
+  }
+
+  Widget _buildNoteCard(BuildContext context, int index) {
+    return Dismissible(
+      key: Key(index.toString()),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Icon(Icons.delete, color: Colors.white),
+      ),
+      confirmDismiss: (direction) async {
+        return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Confirm Delete'),
+              content: Text('Are you sure you want to delete this note?'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text('Yes'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      onDismissed: (direction) {
+        // Handle note deletion here
+      },
+      child: Card(
+        margin: EdgeInsets.all(8),
+        child: ListTile(
+          title: Text('Note Title $index'),
+          subtitle: Text('Note Description $index'),
+          trailing: IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              // Handle edit note action
+            },
+          ),
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_lelo/presentation/screens/note_list_screen.dart';
 import 'presentation/screens/home_screen.dart';
 
 void main() {
@@ -13,7 +14,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      routes: {
+        '/': (context) => HomeScreen(),
+        '/notes': (context) => NotesListScreen(),
+      },
+      //home: HomeScreen(),
     );
   }
 }

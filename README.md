@@ -29,3 +29,11 @@ samples, guidance on mobile development, and a full API reference.
 - `settings_screen.dart`: Screen widget for app settings.
 - `note_item.dart`: Widget file for displaying a single note item.
 - `main.dart`: Entry point of your Flutter app.
+
+### hot reload
+
+To relaunch your Flutter app in the emulator after making code changes, you have a few options:
+
+- Hot Reload: If you're making small changes and want to see them reflected in the running app without restarting it, you can use hot reload. Simply save your changes in the code editor, and then press the "R" key twice in your terminal or press the hot reload button in your IDE.
+- Stop and Restart: If you've made significant changes or if hot reload isn't working as expected, you can stop the currently running app and restart it. You can do this by pressing "Ctrl+C" in your terminal to stop the running Flutter process, and then running flutter run again.
+- Rerun: If you want to ensure a clean build and start the app from scratch, you can use the flutter run command again without stopping the current process. This will rebuild and rerun the app.
