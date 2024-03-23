@@ -40,6 +40,16 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Handle FAB click - Navigate to NewNoteScreen
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NewNoteScreen()),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedTabIndex,
         onTap: (index) {
@@ -139,6 +149,90 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+}
+
+class NewNoteScreen extends StatefulWidget {
+  @override
+  _NewNoteScreenState createState() => _NewNoteScreenState();
+}
+
+class _NewNoteScreenState extends State<NewNoteScreen> {
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('New Note'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  hintText: 'Title',
+                  border: InputBorder.none,
+                ),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              flex: 2,
+              child: TextField(
+                controller: _descriptionController,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                expands: true,
+                minLines: null,
+                decoration: InputDecoration(
+                  hintText: 'Start writing...',
+                  border: InputBorder.none,
+                ),
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Handle save action
+          _saveNote();
+        },
+        child: Icon(Icons.save),
+      ),
+    );
+  }
+
+  void _saveNote() {
+    // Save the note logic here
+    String title = _titleController.text;
+    String description = _descriptionController.text;
+
+    // Do something with title and description, such as saving to database
+    print('Title: $title');
+    print('Description: $description');
+
+    // Clear the text fields after saving
+    _titleController.clear();
+    _descriptionController.clear();
+
+    // Optionally, navigate back to the previous screen
+    Navigator.pop(context);
   }
 }
 
