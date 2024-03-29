@@ -43,11 +43,11 @@ class NotesListScreen extends StatelessWidget {
 
   Widget _buildNoteCard(BuildContext context, int index) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
       child: ListTile(
         title: Text('Note Title $index'),
         subtitle: Text('Note Description $index'),
-        trailing: Icon(Icons.edit),
+        trailing: Icon(Icons.more_vert),
         onTap: () {
           // Handle category card click - Navigate to Note Detail Screen
           Navigator.push(
@@ -100,8 +100,12 @@ class NoteDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Text('Note Detail'),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 16.0), // Adjust the value as needed
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: Text('Note Detail'),
+        ),
       ),
     );
   }

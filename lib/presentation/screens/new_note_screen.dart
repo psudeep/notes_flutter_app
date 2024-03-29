@@ -83,7 +83,7 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
       title: title,
       description: description,
       createdAt: DateTime.now(),
-      id: '',
+      // id: '',
     );
 
     NoteDatabase database = NoteDatabase();

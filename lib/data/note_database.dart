@@ -47,7 +47,7 @@ class NoteDatabase {
     final List<Map<String, dynamic>> maps = await db.query('notes');
     return List.generate(maps.length, (i) {
       return Note(
-        id: maps[i]['id'],
+        // id: maps[i]['id'],
         title: maps[i]['title'],
         description: maps[i]['description'],
         createdAt: DateTime.now(),

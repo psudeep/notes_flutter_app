@@ -211,7 +211,7 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 25),
             Expanded(
               flex: 2,
               child: TextField(
@@ -250,8 +250,7 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
     );
   }
 
-  void _saveNote() {
-    // Save the note logic here
+  void _saveNote() async {
     String title = _titleController.text;
     String description = _descriptionController.text;
 
@@ -259,13 +258,38 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
     print('Title: $title');
     print('Description: $description');
 
-    // Clear the text fields after saving
+    Note note = Note(
+      title: title,
+      description: description,
+      createdAt: DateTime.now(),
+      // id: 1,
+    );
+
+    NoteDatabase database = NoteDatabase();
+    await database.insertNote(note);
+
     _titleController.clear();
     _descriptionController.clear();
 
-    // Optionally, navigate back to the previous screen
     Navigator.pop(context);
   }
+
+  // void _saveNote() {
+  //   // Save the note logic here
+  //   String title = _titleController.text;
+  //   String description = _descriptionController.text;
+
+  //   // Do something with title and description, such as saving to database
+  //   print('Title: $title');
+  //   print('Description: $description');
+
+  //   // Clear the text fields after saving
+  //   _titleController.clear();
+  //   _descriptionController.clear();
+
+  //   // Optionally, navigate back to the previous screen
+  //   Navigator.pop(context);
+  // }
 }
 
 // Note Detail Screen
