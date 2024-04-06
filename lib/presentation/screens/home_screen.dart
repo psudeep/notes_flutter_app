@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:notes_lelo/data/models/note.dart';
 import 'package:notes_lelo/presentation/screens/login_screen.dart';
 import '../../data/models/note_model.dart';
@@ -13,21 +14,61 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedTabIndex = 0;
-  List<Note> notes = [];
+  // List<Note> notes = [];
+  List<Note> notes = [
+    Note(
+      // id: 1,
+      title: 'Note 1',
+      description: 'Description of Note 1',
+      createdAt: DateTime.now(),
+    ),
+    Note(
+      // id: 2,
+      title: 'Note 2',
+      description: 'Description of Note 2',
+      createdAt: DateTime.now(),
+    ),
+    // Add more dummy notes as needed
+  ];
 
   @override
   void initState() {
+    print('Home Screen Initialized');
     super.initState();
-    _fetchNotes();
+    // _fetchNotes(); // Comment this line
+    print('Notes: $notes');
+    _initializeDummyNotes(); // Add this line
+  }
+
+  void _initializeDummyNotes() {
+    notes = [
+      Note(
+        title: 'Note 1',
+        description: 'Description of Note 1',
+        createdAt: DateTime.now(),
+      ),
+      Note(
+        title: 'Note 2',
+        description: 'Description of Note 2',
+        createdAt: DateTime.now(),
+      ),
+      // Add more dummy notes as needed
+    ];
+    print(
+        'Notes length: ${notes.length}'); // Print the length of the notes list
+    print('Notes contents: $notes'); // Print the contents of the notes list
   }
 
   Future<void> _fetchNotes() async {
-    notes = await NoteDatabase.getAllNotesV2();
+    // notes = await NoteDatabase.getAllNotesV2();
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    // initState();
+    print('Notes: $notes');
+    print('Notes Length: ${notes.length}');
     return Scaffold(
       appBar: AppBar(
         title: Text(Constants.homeScreenName),
@@ -114,16 +155,95 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildCategoriesFilter() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            _buildCategoryTab('Personal', 0),
-            _buildCategoryTab('ToDo', 1),
-            _buildCategoryTab('Work', 2),
-            // Add more category tabs as needed
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _buildCategoryTab('Personal', 0),
+                _buildCategoryTab('ToDo', 1),
+                _buildCategoryTab('Work', 2),
+                // Add more category tabs as needed
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
+          Container(
+            margin: EdgeInsets.only(left: 10), // Add left margin
+            decoration: BoxDecoration(
+              border: Border(
+                bottom:
+                    BorderSide(width: 2, color: Colors.black), // Add underline
+              ),
+            ),
+            child: Text(
+              'Recent Notes',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(height: 10),
+          SizedBox(
+            height: 200, // Adjust the height as needed
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: notes.length,
+              itemBuilder: (context, index) {
+                final note = notes[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NoteDetailScreen(
+                          categoryName: note.title,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 200, // Adjust the width as needed
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          note.title.length > 30
+                              ? '${note.title.substring(0, 30)}...'
+                              : note.title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          note.description.length > 30
+                              ? '${note.description.substring(0, 30)}...'
+                              : note.description,
+                          style: TextStyle(
+                            fontSize: 12,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          DateFormat('yyyy-MM-dd').format(note.createdAt),
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -255,8 +375,6 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
     String description = _descriptionController.text;
 
     // Do something with title and description, such as saving to database
-    print('Title: $title');
-    print('Description: $description');
 
     Note note = Note(
       title: title,
