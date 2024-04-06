@@ -89,18 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           _buildUserSection(),
           _buildCategoriesFilter(),
-          Expanded(
-            child: ListView.builder(
-              itemCount: notes.length,
-              itemBuilder: (context, index) {
-                final note = notes[index];
-                return ListTile(
-                  title: Text(note.title),
-                  subtitle: Text(note.description),
-                );
-              },
-            ),
-          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -185,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           SizedBox(height: 10),
           SizedBox(
-            height: 200, // Adjust the height as needed
+            height: 120, // Adjust the height as needed
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: notes.length,
