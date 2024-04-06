@@ -6,6 +6,38 @@ import '../../data/models/note_model.dart';
 import '../../data/note_database.dart';
 import '../../common/toast.dart';
 import '../../common/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
+class Note {
+  final String title;
+  final String description;
+  final DateTime createdAt;
+
+  Note({
+    required this.title,
+    required this.description,
+    required this.createdAt,
+  });
+
+  // Convert Note object to JSON map
+  Map<String, dynamic> toJson() {
+    return {
+      "title": title,
+      "description": description,
+      "createdAt": createdAt.toIso8601String()
+    };
+  }
+
+  // Create Note object from JSON map
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
+      title: json['title'],
+      description: json['description'],
+      createdAt: DateTime.parse(json['createdAt']),
+    );
+  }
+}
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -13,31 +45,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<Note> notes = [];
   int _selectedTabIndex = 0;
   // List<Note> notes = [];
-  List<Note> notes = [
-    Note(
-      // id: 1,
-      title: 'Note 1',
-      description: 'Description of Note 1',
-      createdAt: DateTime.now(),
-    ),
-    Note(
-      // id: 2,
-      title: 'Note 2',
-      description: 'Description of Note 2',
-      createdAt: DateTime.now(),
-    ),
-    // Add more dummy notes as needed
-  ];
+  // List<Note> notes = [
+  //   Note(
+  //     // id: 1,
+  //     title: 'Note 1',
+  //     description: 'Description of Note 1',
+  //     createdAt: DateTime.now(),
+  //   ),
+  //   Note(
+  //     // id: 2,
+  //     title: 'Note 2',
+  //     description: 'Description of Note 2',
+  //     createdAt: DateTime.now(),
+  //   ),
+  //   // Add more dummy notes as needed
+  // ];
 
   @override
   void initState() {
     print('Home Screen Initialized');
     super.initState();
-    // _fetchNotes(); // Comment this line
+    _fetchNotes(); // Comment this line
     print('Notes: $notes');
-    _initializeDummyNotes(); // Add this line
+    // _initializeDummyNotes(); // Add this line
   }
 
   void _initializeDummyNotes() {
@@ -60,8 +93,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _fetchNotes() async {
-    // notes = await NoteDatabase.getAllNotesV2();
-    setState(() {});
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? noteStrings = prefs.getStringList('notes');
+    if (noteStrings != null) {
+      setState(() {
+        notes = noteStrings
+            .map((noteString) => Note.fromJson(jsonDecode(noteString)))
+            .toList();
+      });
+    }
   }
 
   @override
@@ -351,33 +391,29 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
             ),
           );
           // Handle save action
-          _saveNote();
+          _saveNotes();
         },
         child: Icon(Icons.save),
       ),
     );
   }
 
-  void _saveNote() async {
-    String title = _titleController.text;
-    String description = _descriptionController.text;
+  Future<void> _saveNotes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> noteStrings =
+        notes.map((note) => note.toJson()).toList().cast<String>();
+    await prefs.setStringList('notes', noteStrings);
+  }
 
-    // Do something with title and description, such as saving to database
-
-    Note note = Note(
-      title: title,
-      description: description,
-      createdAt: DateTime.now(),
-      // id: 1,
-    );
-
-    NoteDatabase database = NoteDatabase();
-    await database.insertNote(note);
-
-    _titleController.clear();
-    _descriptionController.clear();
-
-    Navigator.pop(context);
+  void _addNote() {
+    setState(() {
+      notes.add(Note(
+        title: 'New Note ${notes.length + 1}',
+        description: 'Description of new note',
+        createdAt: DateTime.now(),
+      ));
+      _saveNotes();
+    });
   }
 
   // void _saveNote() {
