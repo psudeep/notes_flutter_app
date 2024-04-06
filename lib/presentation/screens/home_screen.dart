@@ -13,11 +13,17 @@ class Note {
   final String title;
   final String description;
   final DateTime createdAt;
+  final String? category;
+  final List<String>? tags;
+  DateTime? updatedAt;
 
   Note({
     required this.title,
     required this.description,
     required this.createdAt,
+    this.category,
+    this.tags,
+    this.updatedAt,
   });
 
   // Convert Note object to JSON map
@@ -391,7 +397,7 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
             ),
           );
           // Handle save action
-          _saveNotes();
+          _addNote();
         },
         child: Icon(Icons.save),
       ),
